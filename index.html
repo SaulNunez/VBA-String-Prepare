@@ -11,23 +11,24 @@
 
 <body>
   <div class="container">
+    <h1>Long string prepare for VBA</h1>
+    <p>VBA doesn't have a native way to input a large string. The only way is to manually cut them
+      and concatenate them.
+      This tool does so automatically.
+    </p>
     <form>
-      <h1>Long string prepare for VBA</h1>
-      <p>VBA doesn't have a native way to input a large string. The only way is to manually cut them
-        and concatenate them.
-        This tool does so automatically.
-      </p>
-      <p>Max line lenght</p>
-      <input type="number" value="64">
-      <textarea placeholder="Write here your long string" name="input" rows="10" cols="30">
-            </textarea>
-      <output name="x" for="a b"></output>
-      <input type="submit">
+      <div class="form-group">
+        <label for="max_length">Max line lenght</label>
+        <input type="number" value="64" class="form-control" id="max_length">
+        <textarea class="form-control" id="input" placeholder="Write here your long string" name="input" rows="10" cols="30"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Prepare</button>
+      <output name="out" for="a b" class="form-control"></output>
     </form>
   </div>
 
   <script>
-
+      
   </script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
