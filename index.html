@@ -4,32 +4,48 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>title</title>
+  <title>VBA Long String Preparer</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <style>
+    output {
+      /* Prevent overflow of output */
+      resize: vertical;
+      overflow: auto;
+      /* Output lines respecting new lines */
+      white-space: pre;
+      display: block;
+      unicode-bidi: embed;
+
+      /* Code look */
+      font-family: monospace;
+    }
+
+    #result {
+      min-height: 16rem;
+    }
+  </style>
 </head>
 
 <body>
   <div class="container">
-    <h1>Long string prepare for VBA</h1>
-    <p>VBA doesn't have a native way to input a large string. The only way is to manually cut them
+    <h1>VBA Long String Preparer</h1>
+    <p>VBA does not have a language way to input large strings. The only way is to manually cut them
       and concatenate them.
-      This tool does so automatically.
+      This tool does so automagically.
     </p>
-    <form>
       <div class="form-group">
         <label for="max_length">Max line lenght</label>
-        <input type="number" value="64" class="form-control" id="max_length">
-        <textarea class="form-control" id="input" placeholder="Write here your long string" name="input" rows="10" cols="30"></textarea>
+        <input name="max_length" type="number" value="64" class="form-control" id="max_length">
+        <label for="text">Text</label>
+        <textarea class="form-control" id="text" placeholder="Write here your long string" name="text" rows="10" cols="30"></textarea>
       </div>
-      <button type="submit" class="btn btn-primary">Prepare</button>
-      <output name="out" for="a b" class="form-control"></output>
-    </form>
-  </div>
+      <button type="submit" class="btn btn-primary" onclick="prepareText();">Prepare</button>
+      <br/>
+      <label for="result">Output</label>
+      <output name="result" class="form-control" for="max_lenght text" id="result"></output>
 
-  <script>
-      
-  </script>
+  </div>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
     crossorigin="anonymous"></script>
@@ -39,6 +55,32 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
+    <script>
+      function escapeVBA(text){
+        let vba = text.toString();
+
+        //Escape double quotes
+        vba = vba.replace(/["]/g, '\"\"');
+
+        return vba;
+      }
+
+      function prepareText(){
+        let maxLength = document.getElementById("max_length");
+        let text = document.getElementById("text");
+        let output = document.getElementById('result');
+        
+        //First is the regex literal
+        //Second is flags
+        const regex = new RegExp(`.{1,${maxLength.value}}`, "g");
+
+        //First we split to certain lenght, as regex
+        //We escape characters that might wreck syntax
+        //Then we set it up as a VBA string
+        //Then we add between them a new line "escape" and the concat operator
+        output.value = text.value.match(regex).map(substr => escapeVBA(substr)).map(substr => `"${substr}"`).join(' _\n& ');
+      }
+  </script>
 </body>
 
 </html>
